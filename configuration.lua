@@ -292,12 +292,14 @@ local addonCategory = Settings.RegisterCanvasLayoutCategory(optionsFrame, "Pelic
 addonCategory.ID = "PelicanUI"
 Settings.RegisterAddOnCategory(addonCategory)
 
+PelicanUI_SettingsCategory = addonCategory
+
 -- /pelican shortcut to open configuration panel
 SLASH_PELICAN1 = "/pelican"
 SlashCmdList["PELICAN"] = function(msg)
     if Settings and Settings.OpenToCategory then
-        Settings.OpenToCategory(addonCategory.ID)
+        Settings.OpenToCategory(addonCategory)
     else
-        print("Impossible d’ouvrir la configuration : API Settings indisponible.")
+        print("Impossible d'ouvrir la configuration : API Settings indisponible.")
     end
 end

@@ -6,10 +6,16 @@ local ICON_PATH = "Interface\\AddOns\\PelicansUI\\Medias\\icon.tga"
 -- PelicanUI_Settings (SavedVariables) is declared in the .toc
 
 local function OpenSettings()
-    if Settings and Settings.OpenToCategory then
-        Settings.OpenToCategory("PelicanUI")
+    if SettingsPanel and PelicanUI_SettingsCategory then
+        SettingsPanel:OpenToCategory(PelicanUI_SettingsCategory)
+        -- Force selection of the category after opening
+        if SettingsPanel.SelectCategory then
+            C_Timer.After(0.1, function()
+                SettingsPanel:SelectCategory(PelicanUI_SettingsCategory)
+            end)
+        end
     else
-        print("PelicanUI: unable to open settings (Settings API unavailable).")
+        print("PelicanUI: unable to open settings.")
     end
 end
 

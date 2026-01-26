@@ -1,4 +1,4 @@
-## Interface: 110200
+## Interface: 120000
 ## Title: Pelicans UI
 ## Notes: A lighthearted guild-focused addon that adds some fun features
 ## Author: Nek
