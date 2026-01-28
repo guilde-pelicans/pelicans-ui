@@ -2,7 +2,7 @@
 ## Title: Pelicans UI
 ## Notes: A lighthearted guild-focused addon that adds some fun features
 ## Author: Nek
-## Version: 1.0.2
+## Version: 1.0.4
 ## SavedVariables: PelicanUI_Settings
 ## IconTexture: Interface\AddOns\PelicansUI\Medias\icon.tga
 ## X-Curse-Project-ID: 1326041
