@@ -290,3 +290,57 @@ function PelicanUI_Animations.shake(imagePath)
     frame:Show()
     ag:Play()
 end
+
+-- Helper: animate a sprite sheet stored as frame-01.png, frame-02.png, ... in a directory.
+-- texture    : WoW Texture object to update
+-- dirPath    : full addon path to the directory (e.g. "Interface\\AddOns\\PelicansUI\\Medias\\ready\\go")
+-- frameCount : total number of frames in the directory
+-- fps        : frames per second
+-- loop       : if true, cycles indefinitely; if false, plays once then calls onFinish
+-- onFinish   : optional callback fired when a non-looping animation ends
+-- Returns a ticker handle; call handle:Cancel() to stop early.
+function PelicanUI_Animations.playFrames(texture, dirPath, frameCount, fps, loop, onFinish)
+    local currentFrame = 1
+    local ticker
+
+    local function setFrame()
+        texture:SetTexture(dirPath .. "\\" .. string.format("%02d", currentFrame) .. ".png")
+    end
+
+    setFrame() -- first frame shown immediately, no delay
+    currentFrame = 2
+
+    ticker = C_Timer.NewTicker(1 / fps, function()
+        if not loop and currentFrame > frameCount then
+            ticker:Cancel()
+            if onFinish then onFinish() end
+            return
+        end
+        setFrame()
+        if loop then
+            currentFrame = currentFrame % frameCount + 1
+        else
+            currentFrame = currentFrame + 1
+        end
+    end)
+
+    return ticker
+end
+
+-- Preload: force GPU upload of all frames in a sprite sheet by rendering them once
+-- on a 1×1 off-screen frame at addon load time, eliminating first-play flickering.
+-- dirPath    : same as playFrames
+-- frameCount : same as playFrames
+function PelicanUI_Animations.preloadFrames(dirPath, frameCount)
+    local f = CreateFrame("Frame", nil, UIParent)
+    f:SetSize(1, 1)
+    f:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", 0, -10) -- below visible screen
+    for i = 1, frameCount do
+        local t = f:CreateTexture(nil, "BACKGROUND")
+        t:SetAllPoints(f)
+        t:SetTexture(dirPath .. "\\" .. string.format("%02d", i) .. ".png")
+    end
+    f:Show()
+    -- Hide after a few seconds; textures remain cached in GPU memory
+    C_Timer.After(5, function() f:Hide() end)
+end
