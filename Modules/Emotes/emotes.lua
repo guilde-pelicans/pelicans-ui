@@ -8,21 +8,27 @@ local IMAGE_BASE_PATH = "Interface\\AddOns\\PelicansUI\\Medias\\emotes\\"
 local emotes = {
     ["<3"] = { behaviour = "replace", image = "heart.tga" },
     [":D"] = { behaviour = "replace", image = "big-smile.tga" },
+    [":nephlol:"] = { behaviour = "replace", image = "big-smile.tga" },
     [":)"] = { behaviour = "replace", image = "smile.tga" },
     [":("] = { behaviour = "replace", image = "frown.tga" },
     [":o"] = { behaviour = "replace", image = "open-mouth.tga" },
     [";)"] = { behaviour = "replace", image = "wink.tga" },
     [":'("] = { behaviour = "replace", image = "cry.tga" },
     ["meh"] = { behaviour = "replace", image = "gamine.tga", wholeWord = true },
+    [":Gamine2:"] = { behaviour = "replace", image = "gamine.tga", wholeWord = true },
+    [":Gamine:"] = { behaviour = "replace", image = "gamine.tga", wholeWord = true },
     ["murloc"] = { behaviour = "after", image = "murloc.tga", wholeWord = true },
     ["zzz"] = { behaviour = "replace", image = "zzz.tga", wholeWord = true },
     ["caca"] = { behaviour = "replace", image = "poop.tga" },
     ["merde"] = { behaviour = "after", image = "poop.tga" },
-    ["+1"] = { behaviour = "replace", image = "nek-pouce.tga" },
+    ["+1"] = { behaviour = "replace", image = "nek-pouce.tga", wholeWord = true },
     ["ok"] = { behaviour = "replace", image = "nek-pouce.tga", wholeWord = true },
+    [":Nekpouce:"] = { behaviour = "replace", image = "nek-pouce.tga", wholeWord = true },
     ["saucisse"] = { behaviour = "after", image = "sausage.tga", wholeWord = true },
     ["so6"] = { behaviour = "replace", image = "sausage.tga", wholeWord = true },
+    [":Peliso6:"] = { behaviour = "replace", image = "sausage.tga", wholeWord = true },
     ["fu*k"] = { behaviour = "replace", image = "gogo.tga", wholeWord = true },
+    [":gogofu:"] = { behaviour = "replace", image = "gogo.tga", wholeWord = true },
 }
 
 -- Helper function to escape special characters in Lua patterns
@@ -35,32 +41,39 @@ local function getEmoteTag(emote)
     return "|T" .. IMAGE_BASE_PATH .. emote.image .. ":16|t"
 end
 
+-- Applique le comportement (replace/before/after) d'un emote à un texte matché
+local function applyBehaviour(emote, emoteTag, match)
+    if emote.behaviour == "replace" then
+        return emoteTag
+    elseif emote.behaviour == "before" then
+        return emoteTag .. " " .. match
+    elseif emote.behaviour == "after" then
+        return match .. " " .. emoteTag
+    else
+        return match
+    end
+end
+
 -- Function to replace text with emotes
 local function replaceEmotesInText(text)
     for code, emote in pairs(emotes) do
         local emoteTag = getEmoteTag(emote)
+        local escaped = escapePattern(code)
 
-        -- If wholeWord is defined, we replace only the full word with frontier
-        local pattern
         if emote.wholeWord then
-            pattern = "%f[%w](" .. escapePattern(code) .. ")%f[^%w]"
+            text = text:gsub("()" .. escaped .. "()", function(startPos, endPos)
+                local before = text:sub(startPos - 1, startPos - 1)
+                local after = text:sub(endPos, endPos)
+                if before:match("%w") or after:match("%w") then
+                    return code
+                end
+                return applyBehaviour(emote, emoteTag, code)
+            end)
         else
-            pattern = "(" .. escapePattern(code) .. ")"
+            text = text:gsub("(" .. escaped .. ")", function(match)
+                return applyBehaviour(emote, emoteTag, match)
+            end)
         end
-
-        local function replaceFunc(match)
-            if emote.behaviour == "replace" then
-                return emoteTag
-            elseif emote.behaviour == "before" then
-                return emoteTag .. " " .. match
-            elseif emote.behaviour == "after" then
-                return match .. " " .. emoteTag
-            else
-                return match
-            end
-        end
-
-        text = text:gsub(pattern, replaceFunc)
     end
     return text
 end

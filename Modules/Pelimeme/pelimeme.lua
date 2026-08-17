@@ -14,6 +14,7 @@ local pelimemes = {
     ["gogorain"] = { desc = "Pluie de Gogo", image = "gogo.png", animation = "rain" },
     ["sausage"] = { desc = "Saucisse", image = "sausage.png", animation = "shake" },
     ["sausagerain"] = { desc = "Pluie de saucisses", image = "sausage.png", animation = "rain" },
+    ["murlove"] = { desc = "Murlove", image = "love.png", animation = "simpleDisplay" },
 }
 
 local lastReceivedPelimemeTimestamp = nil

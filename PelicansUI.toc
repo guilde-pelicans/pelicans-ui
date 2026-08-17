@@ -1,8 +1,8 @@
-## Interface: 120000, 120001
+## Interface: 120000, 120001, 120007, 120100
 ## Title: Pelicans UI
 ## Notes: A lighthearted guild-focused addon that adds some fun features
 ## Author: Nek
-## Version: 1.0.5
+## Version: 1.0.6
 ## SavedVariables: PelicanUI_Settings
 ## IconTexture: Interface\AddOns\PelicansUI\Medias\icon.tga
 ## X-Curse-Project-ID: 1326041
@@ -20,3 +20,4 @@ Modules\Pelimeme\pelimeme.lua
 Modules\Awards\awards.lua
 Modules\Emotes\emotes.lua
 Modules\SillyThings\ready-check.lua
+Modules\SillyThings\pause.lua

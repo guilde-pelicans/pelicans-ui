@@ -176,9 +176,31 @@ end)
 
 local sep3 = CreateSeparator(content, readyCheckCheckbox, -12)
 
+-- PAUSE
+local pauseHeader = content:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+pauseHeader:SetPoint("TOPLEFT", sep3, "BOTTOMLEFT", 0, -12)
+pauseHeader:SetText("Pause")
+
+local pauseDesc = content:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+pauseDesc:SetPoint("TOPLEFT", pauseHeader, "BOTTOMLEFT", 0, -6)
+pauseDesc:SetJustifyH("LEFT")
+pauseDesc:SetWidth(520)
+pauseDesc:SetText("Affiche une petite animation de pause lorsqu’un /pull de plus de 60 secondes est annoncé (countdown natif, fonctionne sans BigWigs/DBM).\n|cffffff00/pelipause|r pour tester l’animation.")
+
+local pauseCheckbox = CreateFrame("CheckButton", nil, content, "UICheckButtonTemplate")
+pauseCheckbox:SetPoint("TOPLEFT", pauseDesc, "BOTTOMLEFT", 0, -8)
+pauseCheckbox.text = pauseCheckbox:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+pauseCheckbox.text:SetPoint("LEFT", pauseCheckbox, "RIGHT", 4, 0)
+pauseCheckbox.text:SetText("Activer")
+pauseCheckbox:SetScript("OnClick", function(self)
+    PelicanUI_Settings.PauseEnabled = self:GetChecked()
+end)
+
+local sep3b = CreateSeparator(content, pauseCheckbox, -12)
+
 -- PeliMeme
 local pmHeader = content:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-pmHeader:SetPoint("TOPLEFT", sep3, "BOTTOMLEFT", 0, -12)
+pmHeader:SetPoint("TOPLEFT", sep3b, "BOTTOMLEFT", 0, -12)
 pmHeader:SetText("PeliMeme")
 
 local pmDesc = content:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
@@ -282,6 +304,7 @@ optionsFrame:SetScript("OnShow", function()
     UIDropDownMenu_SetText(soundsChannelDropdown, GetChannelLabelByValue(PelicanUI_Settings.SoundsChannel or "Master"))
     emotesCheckbox:SetChecked(PelicanUI_Settings.EmotesEnabled)
     readyCheckCheckbox:SetChecked(PelicanUI_Settings.ReadyCheckEnabled)
+    pauseCheckbox:SetChecked(PelicanUI_Settings.PauseEnabled)
     pelimemeCheckbox:SetChecked(PelicanUI_Settings.PelimemeEnabled)
     awardsCheckbox:SetChecked(PelicanUI_Settings.AwardsEnabled)
 

@@ -5,6 +5,7 @@ PelicanUI_Settings = PelicanUI_Settings or {
     TooltipsEnabled = true,
     AwardsEnabled = true,
     ReadyCheckEnabled = true,
+    PauseEnabled = true,
     PelimemeMinDelay = 60,
     DisableSounds = false,
     SoundsChannel = 'Master'
@@ -30,6 +31,11 @@ mainFrame:SetScript("OnEvent", function(_, event)
         if PelicanUI_Settings.ReadyCheckEnabled then
             PelicanUI_ReadyCheck:Initialize()
             welcomeMsg = welcomeMsg .. " ReadyCheck"
+        end
+
+        if PelicanUI_Settings.PauseEnabled then
+            PelicanUI_Pause:Initialize()
+            welcomeMsg = welcomeMsg .. " Pause"
         end
 
         if PelicanUI_Settings.AwardsEnabled then
